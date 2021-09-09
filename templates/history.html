@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}
+    History of jobs
+{% endblock %}
+
+{% block main %}
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Helped</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in jobslist %}
+                <tr>
+                    <td>{{ job["title"] }}</td>
+                    <td>{{ job["username"] }}</td>
+                    <td>{{ job["description"] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

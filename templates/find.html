@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}
+    Find job
+{% endblock %}
+
+{% block main %}
+{% if jobslist%}
+<h2 class="display-5">Take a job! :)</h2>
+<table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for list in jobslist %}
+                {% for job in list %}
+                    <tr>
+                        <td>{{ job["title"] }}</td>
+                        <td>{{ job["type"] }}</td>
+                        <td>{{ job["description"] }}</td>
+                        <td>
+                            <form id="form" action="/find" method="POST">
+                            <input name="jobid" id="jobid" type="hidden" value="{{ job["jobid"] }}">
+                            <button type="submit" class="btn btn-success" form="form" value="Submit">Let me help!</button>
+                            </form>
+                        </td>
+                        </tr>
+                {% endfor %}
+            {% endfor %}
+{% endif %}
+{% endblock %}

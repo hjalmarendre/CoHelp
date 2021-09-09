@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %}
+    Ask for help
+{% endblock %}
+
+{% block main %}
+    <h2>Ask for help</h2>
+    <p name="para" id="para">In this page you can get help with various tasks that you need help with during your illness</p>
+    <p>Press the button below to add a job</p>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+      Add job
+    </button>
+
+    <div id="exampleModal" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add job</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <form action="/help" method="POST" id="form">
+                <div class="form-group col-xs-4">
+                    <input class="form-control" type="text" placeholder="Title" name="title" required>
+                </div>
+
+                <div class="form-group col-xs-4">
+                    <Select class="form-control" name="type" id="type" required>
+                        <option value="" disabled selected>Select job...</option>
+                        <option value="Groceries">Groceries</option>
+                    </Select>
+                </div>
+
+                <div class="form-group">
+                    <textarea class="form-control col-xs-12" name="description" id="description" rows="5" Placeholder="Describe your job" style="min-width: 100%"></textarea>
+                </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="form" value="Submit">Add job</button>
+          </div>
+        </div>
+    </div>
+    </div>
+
+    </div>
+{% endblock %}

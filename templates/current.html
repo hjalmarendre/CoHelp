@@ -1,0 +1,121 @@
+{% extends "layout.html" %}
+{% block title %}
+    Find job
+{% endblock %}
+{% block main %}
+
+<div id ="map" style = "width:1000px; height:600px;"></div>
+<form>
+   <input type="button"class="btn btn-secondary btn-lg" onclick="onMapClick()" value="Switch job" />
+</form>
+<h2 class="display-5">Job info</h2>
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>User</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Message</th>
+                <th>Finished</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td id="title"></td>
+                    <td id="username"></td>
+                    <td id="type"></td>
+                    <td id="description"></td>
+                    <td>
+                        <button type="button" id="mess" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" disabled>
+                          Message
+                        </button>
+                        <div id="exampleModal" class="modal" tabindex="-1" role="dialog">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Message</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                  <form action="/current" method="POST" id="form">
+                                        <input type="hidden" id="helpid" name="helpid">
+                                        <div class="form-group">
+                                        <input class="form-control" type="text" id="subject" name="subject" Placeholder="Subject">
+                                        <textarea class="form-control col-xs-12" name="response" id="response" rows="5" value="" Placeholder="Response" style="min-width: 100%"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" id="send" class="btn btn-primary" form="form" value="Submit">Send</button>
+                              </div>
+                            </div>
+                        </div>
+                        </div>
+                    </td>
+                    <td>
+                        <form action="/current" method=POST id="form2">
+                            <input type="hidden" id="finished" name="finished">
+                            <input type="hidden" id="jobid" name="jobid">
+                            <input type="hidden" id="response" name="response" value="">
+                            <button type="submit" id="finishedbtn" class="btn btn-success" form=form2 value="Finished" disabled>Finished</button>
+                        </form>
+                    </td>
+                    </div>
+                    </tr>
+        </tbody>
+    </table>
+<script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script type="text/javascript">
+var xcor = JSON.parse('{{ xcor|tojson }}')[0]['xcor'];
+var ycor = JSON.parse('{{ ycor|tojson }}')[0]['ycor'];
+var jobslist = JSON.parse('{{ jobslist|tojson }}');
+
+	var map = L.map('map').setView([xcor, ycor], 13);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1IjoiaGphbG1hcmVuZHJlIiwiYSI6ImNrajRqZGF5djFld3cycmxnNm11dTR6ODUifQ.YWKdA3yItWX_f-2sLFyvPg'
+}).addTo(map);
+var marker = [];
+function create_marker() {
+    for (var i = 0; i < jobslist.length; i++) {
+        marker[i] = L.marker([jobslist[i]['xcor'], jobslist[i]['ycor']])
+            .addTo(map);
+        var description = jobslist[i]["description"];
+        var title = jobslist[i]["title"];
+        var user = jobslist[i]["username"];
+        n = i.toString();
+        marker[i].bindPopup("<b>Title:" + title + "</b><br>Description:" + description + "<br> User:" + user).autoClose=false.className=n;
+
+    }
+}
+var n = 0;
+function getRandomInt(min, max) {
+    n = n + 1;
+    if ((n > max)) {
+        n = min;
+    }
+  return n;
+}
+function onMapClick() {
+    i = getRandomInt(0,marker.length-1);
+    marker[i].togglePopup();
+    id = ["title", "username", "type", "description", "helpid", "jobid"];
+      document.getElementById("mess").disabled = false;
+      document.getElementById("finishedbtn").disabled = false;
+
+    for (var i = 0; i < id.length; i++) {
+        document.getElementById(id[i]).innerHTML = jobslist[n][id[i]];
+        document.getElementById(id[i]).value = jobslist[n][id[i]];
+    }
+}
+create_marker();
+ </script>
+{% endblock %}

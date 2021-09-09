@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %}
+    Profile
+{% endblock %}
+{% block main %}
+<div class="row">
+  <div class="column">
+      <img src="static/face.png" style="width: 200px">
+      <p>{{user_info["username"]}} joined COHELP on {{user_info["date"]}}.</p>
+  </div>
+  <div class="column">
+      <H1>USER PROFILE</H1>
+      <div class="container">
+      <p>Username: <b>{{ user_info["username"] }}</b></p>
+      <p>Jobs done: <b>{{jobs_done}} (goal of 100 jobs)</b></p>
+        <div class="containerskill">
+
+              <div id="skills" class="skills html"></div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var jobs_done = JSON.parse('{{ jobs_done|tojson }}');
+document.getElementById("skills").style.width = jobs_done + "%";
+document.getElementById("skills").innerHTML = jobs_done + "%";
+
+
+
+
+
+
+</script>
+
+
+{% endblock %}

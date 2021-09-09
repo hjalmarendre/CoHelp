@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+{% block title %}
+    Overview
+{% endblock %}
+{% block main %}
+
+{% if pend_jobs or ass_jobs %}
+<h2 class="display-5">You want help with</h2>
+<table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Assigned to</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in ass_jobs %}
+                <tr>
+                    <td>{{ job["title"] }}</td>
+                    <td>{{ job["username"]["username"] }}</td>
+                    <td>{{ job["type"] }}</td>
+                    <td>{{ job["description"] }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                          Message
+                        </button>
+                        <div id="exampleModal" class="modal" tabindex="-1" role="dialog">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Respond</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                  <form action="/" method="POST" id="form">
+                                        <input type="hidden" id="to_id" name="to_id" value=" {{job["helperid"]}} ">
+                                        <div class="form-group">
+                                        <input class="form-control" type="text" id="subject" name="subject" Placeholder="Subject">
+                                        <textarea class="form-control col-xs-12" name="response" id="response" value="" rows="5" Placeholder="Response" style="min-width: 100%"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" form="form" value="Submit">Send</button>
+                              </div>
+                            </div>
+                        </div>
+                        </div>
+                    </td>
+                    </div>
+                    </tr>
+                    {% endfor %}
+                    {% for job in pend_jobs %}
+                    <tr>
+                    <td>{{ job["title"] }}</td>
+                    <td>Waiting for help</td>
+                    <td>{{ job["type"] }}</td>
+                    <td>{{ job["description"] }}</td>
+                    <td><button type="button" class="btn btn-primary" disabled>
+                          Respond
+                        </button></td>
+                    </tr>
+                    {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% if messages %}
+<h2 class="display-5">Messages</h2>
+<table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Subject</th>
+                <th>Message</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mess in messages %}
+                <tr>
+                    <td>{{ mess["name"] }}</td>
+                    <td>{{ mess["subject"] }}</td>
+                    <td>{{ mess["message"] }}</td>
+                    <td>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#mModal">
+                          Answer
+                        </button>
+
+
+                        <div id="mModal" class="modal" tabindex="-1" role="dialog">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Respond</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                  <form action="/" method="POST" id="form1">
+                                        <input type="hidden" id="mess_id" name="mess_id" value="{{ mess["mess_id"] }}">
+                                        <input type="hidden" id="subject" name="subject" value="Re:{{ mess["subject"] }}">
+                                        <input type="hidden" id="to_id" name="to_id" value="{{ mess["from_id"] }}">
+                                        <div class="form-group">
+                                        <textarea class="form-control col-xs-12" name="response" id="response" rows="5" Placeholder="Response" style="min-width: 100%" Value=""></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" form="form1" value="Submit">Send</button>
+                              </div>
+                            </div>
+                        </div>
+                        </div>
+                        <button type="submit" class="btn btn-danger" form="form1" value="Submit">Delete</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{% endblock %}
